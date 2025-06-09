@@ -85,13 +85,30 @@ def img_proc(plain_txt, img_dir):
     #if plain txt longer than resolution, add another, repeat until enough
     #for each img, generate a shuffled array of integers (0, res)
     #use this list of int to gen an array of colour codes, multiply the code with the integer from shuffled array and MOD 1000 
-    
+
     #initialise variables
     otp = []
-    img_files = os.listdir(img_dir)
+    img_files = []
+    for file in os.listdir(img_dir):
+        if file.endswith(".jpg"):
+            img_files.append(file)
     
-    print(img_files)
+    if len(img_files) == 0:
+        raise Exception(f"There are no jpg files in the directory {img_dir}")
     
+    total_size = 0
+    for file in img_files:
+        os.chdir(img_dir)
+        img = cv.imread(file)
+        total_size += img.size
+        if total_size >= len(plain_txt):
+            break
+        else:
+            continue
+    os.chdir("..")
+    print(total_size)
+    
+    #convert img to array
 
 def main():
     plain_txt = "0000"
@@ -118,7 +135,7 @@ def main():
     print("encrypted: " + encrypted_txt)
     print("decrypted: " + decrypted_txt)
     
-    img_proc(plain_txt, "tech-elective\img_captured")
+    img_proc(plain_txt, "C:/workspace/tech-elective/img_captured")
     
 if __name__ == "__main__":
     main()
