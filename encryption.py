@@ -12,6 +12,7 @@ import os
 
 #CONST
 NUM_OF_UNICODE_CHAR = 128
+# NUM_OF_UNICODE_CHAR = 154,998
 
 def gcd(a, b):  #greatest common divisor
     while a != b:
@@ -75,6 +76,11 @@ def decrypt(encrypted_txt, otp):
         decrypted_txt = decrypted_txt + chr(char_code)
     return decrypted_txt
 
+def read_file(path):
+    with open(path) as file:
+        plain_txt = file.read()
+    return plain_txt
+
 def img_to_otp(img_dir):
     pass
 
@@ -105,19 +111,23 @@ def img_proc(plain_txt, img_dir):
             break
         else:
             continue
-    os.chdir("..")
+    # os.chdir("..")
     print(total_size)
     
     #convert img to array
 
 def main():
-    plain_txt = "0000"
-    #generate random number --> implement img proc !!!!!!!!!!
-    otp_a = random.sample(range(1, 300), len(plain_txt))
-    otp_b = random.sample(range(1, 300), len(plain_txt))
+    # with open("C:/workspace/tech-elective/plain_txt.txt", encoding="utf-8") as f:
+    #     exec(f.read())
+    plain_txt = read_file("C:/workspace/tech-elective/plain_txt.txt")
+    
+    #generate random number --> implement img proc !!!!!!!!!!    
+    otp_a = random.sample(list(range(1, 4000)), len(plain_txt))
+    otp_b = random.sample(list(range(1, 4000)), len(plain_txt))
+    # otp_b = random.sample(range(1, len(plain_txt)), len(plain_txt))
     
     #both are public
-    prime_num = sympy.randprime(len(plain_txt), 500)
+    prime_num = sympy.randprime(len(plain_txt), len(plain_txt)*3)
     primitive_root_num = primitive_root(prime_num)
     
     #sending from alice to bob (a to b)
@@ -134,8 +144,6 @@ def main():
     print("plain: " + plain_txt)
     print("encrypted: " + encrypted_txt)
     print("decrypted: " + decrypted_txt)
-    
-    img_proc(plain_txt, "C:/workspace/tech-elective/img_captured")
-    
+        
 if __name__ == "__main__":
     main()
