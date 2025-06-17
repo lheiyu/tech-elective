@@ -12,7 +12,6 @@ import os
 
 #CONST
 NUM_OF_UNICODE_CHAR = 128
-# NUM_OF_UNICODE_CHAR = 154,998
 
 def gcd(a, b):  #greatest common divisor
     while a != b:
@@ -83,13 +82,6 @@ def read_file(path):
 
 
 def img_proc(plain_txt, img_dir):
-    #check if all files are jpg in this folder, if not throw an error and terminate the whole thing by indenting all encryption code in if statement
-    #list_of_img = [] (one img)
-    #find resolution, compare wiht len of plain txt
-    #if plain txt longer than resolution, add another, repeat until enough
-    #for each img, generate a shuffled array of integers (0, res)
-    #use this list of int to gen an array of colour codes, multiply the code with the integer from shuffled array and MOD 1000 
-
     #initialise variables
     otp = []
     img_files = []
@@ -131,15 +123,7 @@ def img_to_otp(img_dir, img_files, plain_txt_len):
     
 
 def main():
-    # with open("C:/workspace/tech-elective/plain_txt.txt", encoding="utf-8") as f:
-    #     exec(f.read())
-    # plain_txt = read_file("C:/workspace/tech-elective/plain_txt.txt")
     plain_txt = read_file("plain_txt.txt")
-    
-    #generate random number --> implement img proc !!!!!!!!!!  
-      
-    # otp_a = random.sample(list(range(1, 4000)), len(plain_txt))
-    # otp_b = random.sample(list(range(1, 4000)), len(plain_txt))
     
     otp_a = img_to_otp("img_captured", img_proc(plain_txt, "img_captured"), len(plain_txt))
     otp_b = img_to_otp("img_captured", img_proc(plain_txt, "img_captured"), len(plain_txt))
@@ -149,7 +133,6 @@ def main():
     primitive_root_num = primitive_root(prime_num)
     
     #sending from alice to bob (a to b)
-    
     public_otp_a = gen_otp_public(otp_a, prime_num, primitive_root_num)
     public_otp_b = gen_otp_public(otp_b, prime_num, primitive_root_num)
     
@@ -162,9 +145,6 @@ def main():
     print("plain: " + plain_txt)
     print("encrypted: " + encrypted_txt)
     print("decrypted: " + decrypted_txt)
-    
-    print(f"Length of otp is {len(otp_a)} and {len(otp_b)}")
-    print(f"Length of plain text is {len(plain_txt)}")
             
 if __name__ == "__main__":
     main()
