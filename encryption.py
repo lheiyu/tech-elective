@@ -81,8 +81,6 @@ def read_file(path):
         plain_txt = file.read()
     return plain_txt
 
-def img_to_otp(img_dir):
-    pass
 
 def img_proc(plain_txt, img_dir):
     #check if all files are jpg in this folder, if not throw an error and terminate the whole thing by indenting all encryption code in if statement
@@ -103,29 +101,49 @@ def img_proc(plain_txt, img_dir):
         raise Exception(f"There are no jpg files in the directory {img_dir}")
     
     total_size = 0
+    os.chdir(img_dir)
     for file in img_files:
-        os.chdir(img_dir)
         img = cv.imread(file)
         total_size += img.size
-        if total_size >= len(plain_txt):
-            break
-        else:
-            continue
-    # os.chdir("..")
-    print(total_size)
+    os.chdir("..") 
+    if total_size >= len(plain_txt):
+        return img_files
+    else:
+        raise Exception(f"Plain text too large to encrypt")
     
     #convert img to array
+def img_to_otp(img_dir, img_files, plain_txt_len):
+    otp = []
+    os.chdir(img_dir)
+    for file in img_files:
+        img = cv.imread(file)
+        if len(img.shape) == 3:
+            height, width, ch = img.shape 
+            for i in range(height):
+                if len(otp) >= plain_txt_len:
+                    break
+                for j in range(width):
+                    for k in range(3):
+                        px = img[i][j][k]
+                        otp.append(int(px)*random.randint(1, 20))
+    os.chdir("..")
+    return otp
+    
 
 def main():
     # with open("C:/workspace/tech-elective/plain_txt.txt", encoding="utf-8") as f:
     #     exec(f.read())
-    plain_txt = read_file("C:/workspace/tech-elective/plain_txt.txt")
+    # plain_txt = read_file("C:/workspace/tech-elective/plain_txt.txt")
+    plain_txt = read_file("plain_txt.txt")
     
-    #generate random number --> implement img proc !!!!!!!!!!    
-    otp_a = random.sample(list(range(1, 4000)), len(plain_txt))
-    otp_b = random.sample(list(range(1, 4000)), len(plain_txt))
-    # otp_b = random.sample(range(1, len(plain_txt)), len(plain_txt))
+    #generate random number --> implement img proc !!!!!!!!!!  
+      
+    # otp_a = random.sample(list(range(1, 4000)), len(plain_txt))
+    # otp_b = random.sample(list(range(1, 4000)), len(plain_txt))
     
+    otp_a = img_to_otp("img_captured", img_proc(plain_txt, "img_captured"), len(plain_txt))
+    otp_b = img_to_otp("img_captured", img_proc(plain_txt, "img_captured"), len(plain_txt))
+        
     #both are public
     prime_num = sympy.randprime(len(plain_txt), len(plain_txt)*3)
     primitive_root_num = primitive_root(prime_num)
@@ -144,6 +162,9 @@ def main():
     print("plain: " + plain_txt)
     print("encrypted: " + encrypted_txt)
     print("decrypted: " + decrypted_txt)
-        
+    
+    print(f"Length of otp is {len(otp_a)} and {len(otp_b)}")
+    print(f"Length of plain text is {len(plain_txt)}")
+            
 if __name__ == "__main__":
     main()
