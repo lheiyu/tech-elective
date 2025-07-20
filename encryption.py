@@ -3,14 +3,21 @@ Objectives:
 -key exchange (diffie-hellman)
 -encrypt (shifting) with one time pad (caesar shift)
 -decrypt
+
+box dimensions: 15 x 10 x 7
+
 """
 import random
-import math
 import sympy 
 import cv2 as cv
 import os
+from tkinter import *
+from PIL import Image, ImageTk
+import time
 
 #CONST
+WIN_WIDTH, WIN_HEIGHT = 420, 420
+
 NUM_OF_UNICODE_CHAR = 128
 
 def gcd(a, b):  #greatest common divisor
@@ -80,7 +87,6 @@ def read_file(path):
         plain_txt = file.read()
     return plain_txt
 
-
 def img_proc(plain_txt, img_dir):
     #initialise variables
     otp = []
@@ -122,7 +128,7 @@ def img_to_otp(img_dir, img_files, plain_txt_len):
     return otp
     
 
-def main():
+def main():    
     plain_txt = read_file("plain_txt.txt")
     
     otp_a = img_to_otp("img_captured", img_proc(plain_txt, "img_captured"), len(plain_txt))
